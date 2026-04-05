@@ -1,0 +1,125 @@
+name: PaaSify Deploy Action
+description: Despliega aplicaciones en PaaSify via API (crea o actualiza automáticamente)
+author: DavidRG25
+
+inputs:
+  mode:
+    description: "Modo de despliegue: dockerhub, custom_dockerfile o custom_compose"
+    required: true
+
+  paasify_api_url:
+    description: "URL base de la API de PaaSify (ej: http://host:8000/api)"
+    required: true
+
+  paasify_token:
+    description: "Token de autenticación del alumno en PaaSify"
+    required: true
+
+  name:
+    description: "Nombre del servicio en PaaSify"
+    required: true
+
+  project_id:
+    description: "ID del proyecto en PaaSify"
+    required: true
+
+  subject_id:
+    description: "ID de la asignatura en PaaSify"
+    required: true
+
+  container_type:
+    description: "Tipo de contenedor: web, api, database, misc"
+    required: false
+    default: "web"
+
+  is_web:
+    description: "¿Es accesible por web?"
+    required: false
+    default: "true"
+
+  keep_volumes:
+    description: "¿Conservar datos tras reinicios?"
+    required: false
+    default: "true"
+
+  # Inputs específicos modo dockerhub
+  image:
+    description: "Imagen pública de DockerHub (ej: usuario/app:v1). Solo para modo dockerhub."
+    required: false
+    default: ""
+
+  internal_port:
+    description: "Puerto interno de escucha del contenedor. Solo para modo dockerhub."
+    required: false
+    default: ""
+
+  env_vars:
+    description: 'Variables de entorno como JSON string (ej: {"KEY": "value"}). Solo para modo dockerhub.'
+    required: false
+    default: "{}"
+
+  # Inputs específicos modos custom
+  code_path:
+    description: "Directorio del código a comprimir. Solo para modos custom_*."
+    required: false
+    default: "."
+
+  dockerfile_path:
+    description: "Ruta al Dockerfile. Solo para modo custom_dockerfile."
+    required: false
+    default: ""
+
+  docker_compose_path:
+    description: "Ruta al docker-compose.yml. Solo para modo custom_compose."
+    required: false
+    default: ""
+
+outputs:
+  container_id:
+    description: "ID del servicio creado o actualizado en PaaSify"
+    value: ${{ steps.deploy.outputs.container_id }}
+
+  action_taken:
+    description: "Acción realizada: created o patched"
+    value: ${{ steps.deploy.outputs.action_taken }}
+
+runs:
+  using: composite
+  steps:
+    - name: ✅ Validate inputs
+      shell: bash
+      run: ${{ github.action_path }}/scripts/validate.sh
+      env:
+        INPUT_MODE: ${{ inputs.mode }}
+        INPUT_IMAGE: ${{ inputs.image }}
+        INPUT_INTERNAL_PORT: ${{ inputs.internal_port }}
+        INPUT_CODE_PATH: ${{ inputs.code_path }}
+        INPUT_DOCKERFILE_PATH: ${{ inputs.dockerfile_path }}
+        INPUT_DOCKER_COMPOSE_PATH: ${{ inputs.docker_compose_path }}
+
+    - name: 📦 Prepare code (zip)
+      if: ${{ inputs.mode == 'custom_dockerfile' || inputs.mode == 'custom_compose' }}
+      shell: bash
+      run: ${{ github.action_path }}/scripts/zip_code.sh
+      env:
+        INPUT_CODE_PATH: ${{ inputs.code_path }}
+
+    - name: 🚀 Deploy to PaaSify
+      id: deploy
+      shell: bash
+      run: ${{ github.action_path }}/scripts/deploy.sh
+      env:
+        INPUT_MODE: ${{ inputs.mode }}
+        INPUT_PAASIFY_API_URL: ${{ inputs.paasify_api_url }}
+        INPUT_PAASIFY_TOKEN: ${{ inputs.paasify_token }}
+        INPUT_NAME: ${{ inputs.name }}
+        INPUT_PROJECT_ID: ${{ inputs.project_id }}
+        INPUT_SUBJECT_ID: ${{ inputs.subject_id }}
+        INPUT_CONTAINER_TYPE: ${{ inputs.container_type }}
+        INPUT_IS_WEB: ${{ inputs.is_web }}
+        INPUT_KEEP_VOLUMES: ${{ inputs.keep_volumes }}
+        INPUT_IMAGE: ${{ inputs.image }}
+        INPUT_INTERNAL_PORT: ${{ inputs.internal_port }}
+        INPUT_ENV_VARS: ${{ inputs.env_vars }}
+        INPUT_DOCKERFILE_PATH: ${{ inputs.dockerfile_path }}
+        INPUT_DOCKER_COMPOSE_PATH: ${{ inputs.docker_compose_path }}
