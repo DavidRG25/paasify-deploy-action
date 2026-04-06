@@ -40,7 +40,7 @@ if [[ "${HTTP_CODE}" != "200" ]]; then
 fi
 
 CONTAINER_ID=$(echo "${HTTP_BODY}" | jq -r --arg NAME "${NAME}" \
-  '.results // . | map(select(.name == $NAME)) | first | .id // empty')
+  'if type == "array" then . else .results end | map(select(.name == $NAME)) | first | .id // empty')
 
 # ─────────────────────────────────────────
 # PASO 2: Decidir método (POST o PATCH)
