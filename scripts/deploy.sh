@@ -10,7 +10,6 @@ SUBJECT_ID="${INPUT_SUBJECT_ID}"
 CONTAINER_TYPE="${INPUT_CONTAINER_TYPE:-web}"
 IS_WEB="${INPUT_IS_WEB:-true}"
 KEEP_VOLUMES="${INPUT_KEEP_VOLUMES:-true}"
-echo "DEBUG: INPUT_INTERNAL_PORT='${INPUT_INTERNAL_PORT}'"
 INTERNAL_PORT="${INPUT_INTERNAL_PORT:-80}"
 
 echo ""
@@ -161,7 +160,7 @@ case "${MODE}" in
         -F "project=${PROJECT_ID}" \
         -F "subject=${SUBJECT_ID}" \
         -F "code=@${ZIP_PATH};type=application/zip" \
-        -F "docker_compose=@${COMPOSE_PATH}" \
+        -F "compose=@${COMPOSE_PATH}" \
         "${ENDPOINT}")
     else
       RESPONSE=$(curl -s -w "\n%{http_code}" \
@@ -169,7 +168,7 @@ case "${MODE}" in
         -H "Authorization: Bearer ${TOKEN}" \
         -F "internal_port=${INTERNAL_PORT}" \
         -F "code=@${ZIP_PATH};type=application/zip" \
-        -F "docker_compose=@${COMPOSE_PATH}" \
+        -F "compose=@${COMPOSE_PATH}" \
         "${ENDPOINT}")
     fi
     ;;
