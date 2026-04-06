@@ -72,6 +72,7 @@ case "${MODE}" in
     if [[ "${METHOD}" == "POST" ]]; then
       PAYLOAD=$(jq -n \
         --arg name "${NAME}" \
+        --arg mode "${MODE}" \
         --arg image "${IMAGE}" \
         --argjson port "${INTERNAL_PORT}" \
         --arg type "${CONTAINER_TYPE}" \
@@ -82,6 +83,7 @@ case "${MODE}" in
         --argjson env_vars "${ENV_VARS}" \
         '{
           name: $name,
+          mode: $mode,
           image: $image,
           internal_port: $port,
           container_type: $type,
