@@ -96,8 +96,9 @@ case "${MODE}" in
     else
       PAYLOAD=$(jq -n \
         --arg image "${IMAGE}" \
+        --argjson port "${INTERNAL_PORT}" \
         --argjson env_vars "${ENV_VARS}" \
-        '{image: $image, env_vars: $env_vars}')
+        '{image: $image, internal_port: $port, env_vars: $env_vars}')
     fi
 
     RESPONSE=$(curl -s -w "\n%{http_code}" \
