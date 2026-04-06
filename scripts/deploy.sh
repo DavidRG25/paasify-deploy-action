@@ -27,7 +27,7 @@ echo ""
 echo "🔍 Buscando servicio '${NAME}' en proyecto ${PROJECT_ID}..."
 
 GET_RESPONSE=$(curl -s -w "\n%{http_code}" \
-  -H "Authorization: Token ${TOKEN}" \
+  -H "Authorization: Bearer ${TOKEN}" \
   "${API_URL}/containers/?project=${PROJECT_ID}")
 
 HTTP_BODY=$(echo "${GET_RESPONSE}" | head -n -1)
@@ -100,7 +100,7 @@ case "${MODE}" in
 
     RESPONSE=$(curl -s -w "\n%{http_code}" \
       -X "${METHOD}" \
-      -H "Authorization: Token ${TOKEN}" \
+      -H "Authorization: Bearer ${TOKEN}" \
       -H "Content-Type: application/json" \
       -d "${PAYLOAD}" \
       "${ENDPOINT}")
@@ -115,7 +115,7 @@ case "${MODE}" in
     if [[ "${METHOD}" == "POST" ]]; then
       RESPONSE=$(curl -s -w "\n%{http_code}" \
         -X "${METHOD}" \
-        -H "Authorization: Token ${TOKEN}" \
+        -H "Authorization: Bearer ${TOKEN}" \
         -F "name=${NAME}" \
         -F "container_type=${CONTAINER_TYPE}" \
         -F "is_web=${IS_WEB}" \
@@ -128,7 +128,7 @@ case "${MODE}" in
     else
       RESPONSE=$(curl -s -w "\n%{http_code}" \
         -X "${METHOD}" \
-        -H "Authorization: Token ${TOKEN}" \
+        -H "Authorization: Bearer ${TOKEN}" \
         -F "code=@${ZIP_PATH};type=application/zip" \
         -F "dockerfile=@${DOCKERFILE_PATH}" \
         "${ENDPOINT}")
@@ -144,7 +144,7 @@ case "${MODE}" in
     if [[ "${METHOD}" == "POST" ]]; then
       RESPONSE=$(curl -s -w "\n%{http_code}" \
         -X "${METHOD}" \
-        -H "Authorization: Token ${TOKEN}" \
+        -H "Authorization: Bearer ${TOKEN}" \
         -F "name=${NAME}" \
         -F "container_type=${CONTAINER_TYPE}" \
         -F "is_web=${IS_WEB}" \
@@ -157,7 +157,7 @@ case "${MODE}" in
     else
       RESPONSE=$(curl -s -w "\n%{http_code}" \
         -X "${METHOD}" \
-        -H "Authorization: Token ${TOKEN}" \
+        -H "Authorization: Bearer ${TOKEN}" \
         -F "code=@${ZIP_PATH};type=application/zip" \
         -F "docker_compose=@${COMPOSE_PATH}" \
         "${ENDPOINT}")
