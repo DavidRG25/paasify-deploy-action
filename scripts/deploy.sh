@@ -119,6 +119,7 @@ case "${MODE}" in
         -X "${METHOD}" \
         -H "Authorization: Bearer ${TOKEN}" \
         -F "name=${NAME}" \
+        -F "mode=custom" \
         -F "container_type=${CONTAINER_TYPE}" \
         -F "is_web=${IS_WEB}" \
         -F "keep_volumes=${KEEP_VOLUMES}" \
@@ -148,6 +149,7 @@ case "${MODE}" in
         -X "${METHOD}" \
         -H "Authorization: Bearer ${TOKEN}" \
         -F "name=${NAME}" \
+        -F "mode=custom" \
         -F "container_type=${CONTAINER_TYPE}" \
         -F "is_web=${IS_WEB}" \
         -F "keep_volumes=${KEEP_VOLUMES}" \
