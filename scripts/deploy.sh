@@ -113,7 +113,7 @@ case "${MODE}" in
     DOCKERFILE_PATH="${INPUT_DOCKERFILE_PATH}"
     ZIP_PATH="/tmp/paasify_code.zip"
 
-    echo "🐳 Modo custom_dockerfile — dockerfile: ${DOCKERFILE_PATH}"
+    echo "🐳 Modo custom_dockerfile — dockerfile: ${DOCKERFILE_PATH}, puerto: ${INTERNAL_PORT}"
 
     if [[ "${METHOD}" == "POST" ]]; then
       RESPONSE=$(curl -s -w "\n%{http_code}" \
