@@ -10,6 +10,7 @@ SUBJECT_ID="${INPUT_SUBJECT_ID}"
 CONTAINER_TYPE="${INPUT_CONTAINER_TYPE:-web}"
 IS_WEB="${INPUT_IS_WEB:-true}"
 KEEP_VOLUMES="${INPUT_KEEP_VOLUMES:-true}"
+INTERNAL_PORT="${INPUT_INTERNAL_PORT:-80}"
 
 echo ""
 echo "════════════════════════════════════════"
@@ -64,7 +65,6 @@ case "${MODE}" in
 
   dockerhub)
     IMAGE="${INPUT_IMAGE}"
-    INTERNAL_PORT="${INPUT_INTERNAL_PORT}"
     ENV_VARS="${INPUT_ENV_VARS:-{\}}"
 
     echo "🐳 Modo dockerhub — imagen: ${IMAGE}, puerto: ${INTERNAL_PORT}"
