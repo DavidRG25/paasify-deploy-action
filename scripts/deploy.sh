@@ -124,6 +124,7 @@ case "${MODE}" in
         -F "container_type=${CONTAINER_TYPE}" \
         -F "is_web=${IS_WEB}" \
         -F "keep_volumes=${KEEP_VOLUMES}" \
+        -F "internal_port=${INTERNAL_PORT}" \
         -F "project=${PROJECT_ID}" \
         -F "subject=${SUBJECT_ID}" \
         -F "code=@${ZIP_PATH};type=application/zip" \
@@ -133,6 +134,7 @@ case "${MODE}" in
       RESPONSE=$(curl -s -w "\n%{http_code}" \
         -X "${METHOD}" \
         -H "Authorization: Bearer ${TOKEN}" \
+        -F "internal_port=${INTERNAL_PORT}" \
         -F "code=@${ZIP_PATH};type=application/zip" \
         -F "dockerfile=@${DOCKERFILE_PATH}" \
         "${ENDPOINT}")
@@ -154,6 +156,7 @@ case "${MODE}" in
         -F "container_type=${CONTAINER_TYPE}" \
         -F "is_web=${IS_WEB}" \
         -F "keep_volumes=${KEEP_VOLUMES}" \
+        -F "internal_port=${INTERNAL_PORT}" \
         -F "project=${PROJECT_ID}" \
         -F "subject=${SUBJECT_ID}" \
         -F "code=@${ZIP_PATH};type=application/zip" \
@@ -163,6 +166,7 @@ case "${MODE}" in
       RESPONSE=$(curl -s -w "\n%{http_code}" \
         -X "${METHOD}" \
         -H "Authorization: Bearer ${TOKEN}" \
+        -F "internal_port=${INTERNAL_PORT}" \
         -F "code=@${ZIP_PATH};type=application/zip" \
         -F "docker_compose=@${COMPOSE_PATH}" \
         "${ENDPOINT}")
